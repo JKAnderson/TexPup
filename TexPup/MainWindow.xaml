@@ -1,0 +1,142 @@
+﻿<Window x:Class="TexPup.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TexPup"
+        mc:Ignorable="d"
+        
+        Title="TexPup &lt;version&gt;" DataContext="{Binding ElementName=GameComboBox, Path=SelectedItem}"
+        Initialized="Window_Initialized" Closing="Window_Closing"
+        WindowState="{local:SettingsBinding WindowState}"
+        Left="{local:SettingsBinding WindowLeft}" Top="{local:SettingsBinding WindowTop}"
+        Width="{local:SettingsBinding WindowWidth}" Height="{local:SettingsBinding WindowHeight}">
+
+    <Window.Resources>
+        <local:PackModeConverter x:Key="PackModeConverter"/>
+    </Window.Resources>
+    
+    <DockPanel>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem x:Name="UpdateStatusBarItem" Visibility="Collapsed">
+                <Hyperlink x:Name="UpdateHyperlink" NavigateUri="https://github.com/JKAnderson/SoulsTemplates"
+                           RequestNavigate="Hyperlink_RequestNavigate">New version available!</Hyperlink>
+            </StatusBarItem>
+        </StatusBar>
+
+        <Grid Margin="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Label>Game</Label>
+                <ComboBox Name="GameComboBox" Grid.Row="1" Width="100" SelectionChanged="GameComboBox_SelectionChanged"
+                          DisplayMemberPath="Config.Name" SelectedValuePath="Type" SelectedValue="{local:SettingsBinding SelectedGame}"
+                          IsEnabled="{local:IsNotBusyBinding}"/>
+                <local:DirectoryBox Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="2" Title="Game Directory"
+                                    Description="Select the directory that contains the game's .exe"
+                                    Path="{Binding Mode=TwoWay, Path=Settings.GameDirectory}"
+                                    IsBrowsingEnabled="{local:IsNotBusyBinding}"/>
+
+                <ProgressBar Name="ProgressBar" Grid.ColumnSpan="2" Grid.Row="2" Maximum="10000"/>
+                <Button Grid.Column="2" Grid.Row="2" Click="AbortButton_Click" IsEnabled="{local:IsBusyBinding}">Abort</Button>
+                <Label Name="ProgressLabel" Grid.ColumnSpan="2" Grid.Row="2" Margin="8 0" VerticalAlignment="Center"/>
+            </Grid>
+
+            <TabControl Grid.Row="1">
+                <TabItem Header="Pack">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <local:DirectoryBox Grid.ColumnSpan="2" Title="Input Directory" ShowNewFolderButton="True"
+                                            Description="Select the directory containing your override textures"
+                                            Path="{Binding Mode=TwoWay, Path=Settings.PackDirectory}"
+                                            IsBrowsingEnabled="{local:IsNotBusyBinding}"/>
+
+                        <Label Grid.Row="1">Output Mode</Label>
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center"
+                                    IsEnabled="{local:IsNotBusyBinding}">
+                            <RadioButton IsChecked="{Binding Path=Settings.PackMode, Converter={StaticResource PackModeConverter}, ConverterParameter={x:Static local:PackMode.ModEngine}}">Mod Engine</RadioButton>
+                            <RadioButton IsChecked="{Binding Path=Settings.PackMode, Converter={StaticResource PackModeConverter}, ConverterParameter={x:Static local:PackMode.UXM}}">UXM</RadioButton>
+                        </StackPanel>
+                        <Button Grid.Column="1" Grid.Row="2" Click="PackButton_Click"
+                                IsEnabled="{local:IsNotBusyBinding}">Pack</Button>
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="Unpack">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <local:DirectoryBox Grid.ColumnSpan="2" Title="Output Directory" ShowNewFolderButton="True"
+                                            Description="Select the directory to dump textures into"
+                                            Path="{Binding Mode=TwoWay, Path=Settings.UnpackDirectory}"
+                                            IsBrowsingEnabled="{local:IsNotBusyBinding}"/>
+
+                        <Label Grid.Row="1">Input Sources</Label>
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center"
+                                    IsEnabled="{local:IsNotBusyBinding}">
+                            <CheckBox IsChecked="{Binding Path=Settings.UnpackSourceEbls}">Vanilla</CheckBox>
+                            <CheckBox IsChecked="{Binding Path=Settings.UnpackSourceModEngine}">Mod Engine</CheckBox>
+                            <CheckBox IsChecked="{Binding Path=Settings.UnpackSourceUXM}">UXM</CheckBox>
+                        </StackPanel>
+                        <Button Grid.Column="1" Grid.Row="2" Click="UnpackButton_Click"
+                                IsEnabled="{local:IsNotBusyBinding}">Unpack</Button>
+
+                        <GroupBox Grid.Row="3" Grid.ColumnSpan="2" Header="Filter">
+                            <StackPanel>
+                                <StackPanel Name="FiltersPanel" Orientation="Horizontal"
+                                            IsEnabled="{local:IsNotBusyBinding}"/>
+                                <GroupBox Header="Maps">
+                                    <WrapPanel Name="MapFiltersPanel" ItemWidth="250"
+                                               IsEnabled="{local:IsNotBusyBinding}"/>
+                                </GroupBox>
+                            </StackPanel>
+                        </GroupBox>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Label>Errors</Label>
+                <TextBox Name="ErrorsTextBox" Grid.Row="1" Height="Auto" IsReadOnly="True" VerticalScrollBarVisibility="Visible"/>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>

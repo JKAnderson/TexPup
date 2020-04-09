@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="TexPup.DirectoryBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TexPup"
+             mc:Ignorable="d" 
+             d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
+               Content="{Binding Path=Title, RelativeSource={RelativeSource FindAncestor, AncestorType=local:DirectoryBox}}"/>
+        <TextBox Grid.Row="1" Grid.Column="0"
+                 Text="{Binding Mode=TwoWay, Path=Path, RelativeSource={RelativeSource FindAncestor, AncestorType=local:DirectoryBox}}"
+                 IsEnabled="{Binding Path=IsBrowsingEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=local:DirectoryBox}}"/>
+        <Button Grid.Row="1" Grid.Column="1" Click="BrowseButton_Click"
+                IsEnabled="{Binding Path=IsBrowsingEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=local:DirectoryBox}}">Browse</Button>
+        <Button Grid.Row="1" Grid.Column="2" Click="ExploreButton_Click">Explore</Button>
+    </Grid>
+</UserControl>

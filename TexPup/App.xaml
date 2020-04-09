@@ -1,0 +1,39 @@
+﻿<Application x:Class="TexPup.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:TexPup"
+             StartupUri="MainWindow.xaml" Startup="Application_Startup" Exit="Application_Exit">
+    <Application.Resources>
+        <Style x:Key="GlobalMargin" TargetType="FrameworkElement">
+            <Setter Property="Margin" Value="3"/>
+        </Style>
+        <Style x:Key="BarStyle" TargetType="FrameworkElement" BasedOn="{StaticResource GlobalMargin}">
+            <Setter Property="Height" Value="23"/>
+        </Style>
+
+        <Style TargetType="Button" BasedOn="{StaticResource BarStyle}">
+            <Setter Property="Width" Value="75"/>
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="Margin" Value="3 3 6 3"/>
+        </Style>
+        <Style TargetType="ComboBox" BasedOn="{StaticResource BarStyle}"/>
+        <Style TargetType="Expander" BasedOn="{StaticResource GlobalMargin}"/>
+        <Style TargetType="Label">
+            <Setter Property="Margin" Value="6 3"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+        <Style TargetType="ProgressBar" BasedOn="{StaticResource BarStyle}"/>
+        <Style TargetType="RadioButton">
+            <Setter Property="Margin" Value="3 3 6 3"/>
+        </Style>
+        <Style TargetType="TextBox" BasedOn="{StaticResource BarStyle}">
+            <Style.Triggers>
+                <Trigger Property="IsReadOnly" Value="True">
+                    <Setter Property="Background" Value="#FFE6E6E6"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="TabControl" BasedOn="{StaticResource GlobalMargin}"/>
+    </Application.Resources>
+</Application>
