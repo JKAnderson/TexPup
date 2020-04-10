@@ -66,7 +66,7 @@ namespace TexPup
                         $"Checking files... ({FilesCompleted}/{paths.Length})"));
 
                     if (task.IsFaulted)
-                        errors.Report($"Error in files \"{vf.Path}\"\n{task.Exception}");
+                        errors.Report($"Error in file \"{vf.Path}\"\n{task.Exception}");
                 });
             }
 
@@ -141,6 +141,9 @@ namespace TexPup
 
         private int PackTPF(TPF tpf, string relOutputDir)
         {
+            if (tpf.Platform != TPF.TPFPlatform.PC)
+                return 0;
+
             int textureCount = 0;
             foreach (TPF.Texture texture in tpf)
             {

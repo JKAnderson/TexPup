@@ -128,6 +128,9 @@ namespace TexPup
 
         private int UnpackTPF(TPF tpf, string relOutputDir, UnpackReport report)
         {
+            if (tpf.Platform != TPF.TPFPlatform.PC)
+                return 0;
+
             foreach (TPF.Texture texture in tpf)
             {
                 try
