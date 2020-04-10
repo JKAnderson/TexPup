@@ -16,7 +16,7 @@ namespace TexPup
         public string Write()
         {
             var sb = new StringBuilder();
-            foreach (UnpackReportFile file in Files.OrderBy(f => f.Name).GroupBy(f => f.Name).Select(g => g.First()))
+            foreach (UnpackReportFile file in Files.OrderBy(f => f.Name.ToLower()).GroupBy(f => f.Name.ToLower()).Select(g => g.Last()))
             {
                 if (sb.Length > 0)
                     sb.AppendLine();
