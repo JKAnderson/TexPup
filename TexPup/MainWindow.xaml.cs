@@ -123,7 +123,14 @@ namespace TexPup
             CancelSource = new CancellationTokenSource();
             using (var unpacker = new TexUnpacker((UnpackGame)DataContext))
             {
-                await Task.Run(() => unpacker.Unpack(Progress, ErrorsProgress, CancelSource.Token));
+                try
+                {
+                    await Task.Run(() => unpacker.Unpack(Progress, ErrorsProgress, CancelSource.Token));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Exception occurred while unpacking:\n\n{ex}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
             CancelSource = null;
             Busy = false;
@@ -135,7 +142,14 @@ namespace TexPup
             CancelSource = new CancellationTokenSource();
             using (var packer = new TexPacker((UnpackGame)DataContext))
             {
-                await Task.Run(() => packer.Pack(Progress, ErrorsProgress, CancelSource.Token));
+                try
+                {
+                    await Task.Run(() => packer.Pack(Progress, ErrorsProgress, CancelSource.Token));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Exception occurred while packing:\n\n{ex}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
             CancelSource = null;
             Busy = false;

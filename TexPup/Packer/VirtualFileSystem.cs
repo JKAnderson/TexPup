@@ -21,11 +21,14 @@ namespace TexPup
         public void LoadFiles(string directory)
         {
             directory = directory.TrimEnd('\\');
-            foreach (string realPath in Directory.GetFiles(directory, "*", SearchOption.AllDirectories))
+            if (Directory.Exists(directory))
             {
-                string path = realPath.Substring(directory.Length + 1);
-                var file = new DiskFile(path, realPath);
-                Files[path.ToLower()] = file;
+                foreach (string realPath in Directory.GetFiles(directory, "*", SearchOption.AllDirectories))
+                {
+                    string path = realPath.Substring(directory.Length + 1);
+                    var file = new DiskFile(path, realPath);
+                    Files[path.ToLower()] = file;
+                }
             }
         }
 
